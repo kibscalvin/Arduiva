@@ -20,7 +20,7 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    // You can return a loading indicator or null while the fonts are loading
+    // put this here in case fonts don't load
     return null;
   }
 
@@ -42,7 +42,9 @@ export default function App() {
         {/* <Tab.Screen name="EPay" component={EPayPage} options={{
             tabBarLabel: 'EPay',
             tabBarIcon: () => <Ionicons name="card" size={20} color="#161818" />
-        }}/> */}
+        }}/>
+        mandem ha refused to work but easy
+        */} 
         <Tab.Screen name="Profile" component={ProfilePage} options={{
             tabBarLabel: 'Profile',
             tabBarIcon: () => <Ionicons name="person" size={20} color="#161818" />
