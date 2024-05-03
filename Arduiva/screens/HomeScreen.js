@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons, but i dont need them
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faBoltLightning } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,7 @@ import { faGasPump } from '@fortawesome/free-solid-svg-icons';
 import { faTruckLoading } from '@fortawesome/free-solid-svg-icons';
 
 const HomeScreen = () => {
-    const name = 'Calvin'; // Define the name variable
+    const name = 'Calvin'; // Define my name here, i like how it looks
     const currentLocation = 'Kyanja, Uganda'
 
     function hasPressed(){
@@ -33,13 +33,13 @@ const HomeScreen = () => {
                         
                         <Text style={[styles.gridText, {color: '#efa400'}]}>Fuel</Text>
                     </TouchableOpacity>
-                   {/* HelloContainer*/}
+                   {/* blehh*/}
                     <TouchableOpacity style={[styles.gridItem, {backgroundColor: '#e3f2fd'}, {borderWidth: 1}, {borderColor: '#0a99f5'}]}>
                      <FontAwesomeIcon icon={faBoltLightning} size={26} color = '#0a99f5' />
 
                         <Text style={[styles.gridText, {color: '#0a99f5'}, {fontSize: 17}]}>Battery Jumpstart</Text>
                     </TouchableOpacity>
-                {/* HelloContainer*/}
+                {/* blehh*/}
                 </View>
                 <View style={styles.gridContainer}>
                     <TouchableOpacity style={[styles.gridItem, {backgroundColor: '#f7f7f7'}, {borderWidth: 1}]}>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     },
     helloText: {
         fontSize: 24,
-         fontFamily: 'PTSans_700Bold' // Removed font family
+         fontFamily: 'PTSans_700Bold' // Like this font, resembles safeboda font
     },
     gridItem: {
         width: 150,
