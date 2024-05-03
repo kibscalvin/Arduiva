@@ -1,13 +1,67 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons'; // Importing icons from Font Awesome
 
-console.log("Hello, world!");
-const ServicesPage = () => {
-    return (
-        <View>
-            <Text>Hello, world!</Text>
-        </View>
-    );
+// Define the services and their icons
+const services = [
+  { id: '1', name: 'Fuel Refill', icon: 'gas-pump' },
+  { id: '2', name: 'Battery Jumpstart', icon: 'battery-full' },
+  { id: '3', name: 'Key Retrieval', icon: 'key' },
+  { id: '4', name: 'Schedule Service', icon: 'calendar-alt' },
+  { id: '5', name: 'Tow Service', icon: 'truck' },
+  { id: '6', name: 'Car Not Starting', icon: 'car-crash' },
+  { id: '7', name: 'Been in an Accident', icon: 'exclamation-triangle' },
+  { id: '8', name: 'Electric Car Battery Charge', icon: 'bolt' },
+];
+
+const ServicesOffered = () => {
+  // Function to render each service tile
+  const renderItem = ({ item }) => (
+    <View style={styles.tile}>
+      <FontAwesome5 name={item.icon} size={24} color="#333" />
+      <Text style={styles.serviceName}>{item.name}</Text>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={services}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.container}
+      numColumns={2} // Display two tiles per row
+    />
+  );
 };
 
-export default ServicesPage;
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  tile: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 16,
+    margin: 8,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  serviceName: {
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+});
+
+export default ServicesOffered;
