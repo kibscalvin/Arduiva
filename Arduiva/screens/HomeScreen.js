@@ -61,7 +61,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F8F8FA',
+        backgroundColor: '#fafafa',
         paddingHorizontal: 16,
     },
     helloContainer: {
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     },
     helloText: {
         fontSize: 24,
-         fontFamily: 'PTSans_700Bold' // Like this font, resembles safeboda font
+         fontFamily: 'ASAP' // Like this font, resembles safeboda font
     },
     gridItem: {
         width: 150,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     },
     locationText : {
         fontSize: 10,
-        fontFamily : 'PTSans_400Regular'
+        fontFamily : 'ASAP'
     }
 });
 

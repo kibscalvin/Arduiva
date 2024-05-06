@@ -11,7 +11,7 @@ const services = [
   { id: '5', name: 'Tow Service', icon: 'truck' },
   { id: '6', name: 'Car Not Starting', icon: 'car-crash' },
   { id: '7', name: 'Been in an Accident', icon: 'exclamation-triangle' },
-  { id: '8', name: 'Electric Car Battery Charge', icon: 'bolt' },
+  { id: '8', name: 'Electric Car Charge', icon: 'bolt' },
 ];
 
 const ServicesOffered = () => {

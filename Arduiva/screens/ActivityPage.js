@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
     paddingHorizontal: 20,
+    backgroundColor: '#fafafa',
   },
   item: {
     backgroundColor: '#fff',
@@ -72,8 +73,8 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 16,
-    color: '#86868b',
-    fontFamily: 'PTSans_400Regular',
+    color: 'red',
+    fontFamily: 'ASAP',
   },
 });
 
