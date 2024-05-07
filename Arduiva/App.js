@@ -7,7 +7,7 @@ import ActivityPage from './screens/ActivityPage';
 import ServicesPage from './screens/ServicesPage';
 import ProfilePage from './screens/ProfilePage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Asset from 'react-native-asset';
+
 
 
 export default function App() {
