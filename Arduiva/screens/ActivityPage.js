@@ -4,7 +4,7 @@ import { FlatList, Text, View, StyleSheet, TouchableOpacity } from 'react-native
 const RoadsideAssistanceLogs = () => {
   // Dummy data to simulate logs (replace with data fetched from Firebase later)
   const [logs, setLogs] = useState([
-    { id: '1', title: 'Flat Tire', body: 'Tire repaired on Highway 101' },
+    { id: '1', title: 'Flat Tire', body: 'Tire repaired on Kampala Express' },
     { id: '2', title: 'Fuel Refill', body: 'Refueled at Shell station' },
     { id: '3', title: 'Battery Jumpstart', body: 'Jumpstart performed in parking lot' },
     { id: '4', title: 'Towing Service', body: 'Tow truck called for assistance' },
@@ -67,14 +67,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+  
     marginBottom: 6,
+    fontFamily: 'Asap-Medium',
     
   },
   body: {
     fontSize: 16,
-    color: 'red',
-    fontFamily: 'ASAP',
+    color: '#86868b',
+    fontFamily: 'Asap-Regular',
   },
 });
 

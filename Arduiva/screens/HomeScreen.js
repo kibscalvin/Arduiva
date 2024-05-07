@@ -11,6 +11,7 @@ const HomeScreen = () => {
     const name = 'Calvin'; // Define my name here, i like how it looks
     const currentLocation = 'Kyanja, Uganda'
 
+
     function hasPressed(){
         console.log('pressed')
     }
@@ -54,6 +55,11 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <View style = {{flexDirection:'column'}}>
+                <Text style = {styles.VersionNUmber}>Arduiva Beta 0.0.1</Text>
+                
+
+            </View>
         </View>
     );
 };
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     },
     helloText: {
         fontSize: 24,
-         fontFamily: 'ASAP' // Like this font, resembles safeboda font
+        fontFamily: 'Asap-Medium'
     },
     gridItem: {
         width: 150,
@@ -96,8 +102,8 @@ const styles = StyleSheet.create({
     },
     gridText: {
         fontSize: 18,
-        fontWeight: 'bold',
         textAlign: 'center',
+        fontFamily: 'Asap-SemiBold'
     },
     locationContainer :{
         alignItems : 'center',
@@ -106,7 +112,14 @@ const styles = StyleSheet.create({
     },
     locationText : {
         fontSize: 10,
-        fontFamily : 'ASAP'
+        fontFamily : 'Asap-Medium'
+    },
+    VersionNUmber : {
+        fontSize: 10,
+        fontFamily : 'Asap-MediumItalic',
+        color: '#86868b',
+        marginTop: 130,
+        textAlign: 'center'
     }
 });
 

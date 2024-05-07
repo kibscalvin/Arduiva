@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faCog, faCreditCard, faUserCog, faGavel, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 const ProfilePage = () => {
+
+    const phoneNumber = '+25675910888'; // Define phone number here
     return (
         <View style={styles.container}>
             {/* Header Container */}
@@ -12,7 +14,14 @@ const ProfilePage = () => {
                 <View style={styles.headerContent}>
                   
                     <FontAwesomeIcon icon={faUser} size={20} color="#efa400" style={styles.icon} />
+                    
+                    <View style = {styles.contactInfo}>
                     <Text style={styles.userName}>Kibirige Calvin</Text>
+                    <Text style={styles.number}> { phoneNumber }</Text>
+
+                    </View>
+                   
+
                 </View>
                 <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
             </View>
@@ -60,7 +69,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fafafa',// everwhere except the margin and the header
         paddingHorizontal: 8,
-        marginVertical: 20,
+        marginVertical: 0,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -87,8 +96,9 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontSize: 24,
-        fontFamily: 'ASAP',
+        fontFamily: 'Asap-Medium',
         fontWeight: '500',  
+        marginLeft: 4,
     },
     profileInfo: {
         marginTop: 20,
@@ -112,10 +122,20 @@ const styles = StyleSheet.create({
     },
     infoText: {
         fontSize: 16,
-        fontFamily: 'ASAP',
+        fontFamily: 'Asap-Light',
         fontWeight: '500'
 
     
+    },
+    number: {
+        fontSize: 14,
+        fontFamily: 'Asap-Light',
+        fontWeight: '500',
+        color: '#333',
+    },
+    contactInfo:{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     }
 });
 

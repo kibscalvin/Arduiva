@@ -10,7 +10,7 @@ const services = [
   { id: '4', name: 'Schedule Service', icon: 'calendar-alt' },
   { id: '5', name: 'Tow Service', icon: 'truck' },
   { id: '6', name: 'Car Not Starting', icon: 'car-crash' },
-  { id: '7', name: 'Been in an Accident', icon: 'exclamation-triangle' },
+  { id: '7', name: 'Been or Seen an Accident?', icon: 'exclamation-triangle' },
   { id: '8', name: 'Electric Car Charge', icon: 'bolt' },
 ];
 
@@ -37,6 +37,8 @@ const ServicesOffered = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#F3F6FC',
+    flex: 1
   },
   tile: {
     flex: 1,
@@ -59,8 +61,8 @@ const styles = StyleSheet.create({
   serviceName: {
     marginLeft: 8,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontFamily: 'Asap-Regular',
+    color: '#939394',
   },
 });
 
