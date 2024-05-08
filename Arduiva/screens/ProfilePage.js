@@ -1,32 +1,32 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faCog, faCreditCard, faUserCog, faGavel, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import DarkModeModal from '../components/modals/darkModeModal'; // Import the modal content
 
 const ProfilePage = () => {
+    const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const phoneNumber = '+25675910888'; // Define phone number here
+    const toggleModal = () => {
+        setIsModalVisible(!isModalVisible);
+    };
+
     return (
         <View style={styles.container}>
             {/* Header Container */}
-            <TouchableOpacity>
-            <View style={styles.headerContainer}>
-                <View style={styles.headerContent}>
-                  
-                    <FontAwesomeIcon icon={faUser} size={20} color="#efa400" style={styles.icon} />
-                    
-                    <View style = {styles.contactInfo}>
-                    <Text style={styles.userName}>Kibirige Calvin</Text>
-                    <Text style={styles.number}> { phoneNumber }</Text>
-
+            <TouchableOpacity onPress={toggleModal}>
+                <View style={styles.headerContainer}>
+                    <View style={styles.headerContent}>
+                        <FontAwesomeIcon icon={faUser} size={20} color="#efa400" style={styles.icon} />
+                        <View style={styles.contactInfo}>
+                            <Text style={styles.userName}>Kibirige Calvin</Text>
+                            <Text style={styles.number}>+25675910888</Text>
+                        </View>
                     </View>
-                   
-
+                    <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
                 </View>
-                <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
-            </View>
             </TouchableOpacity>
-            
 
             {/* Profile Info */}
             <View style={styles.profileInfo}>
@@ -58,16 +58,24 @@ const ProfilePage = () => {
                     </View>
                     <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
                 </TouchableOpacity>
+                <Modal visible={isModalVisible} animationType="slide">
+                    <DarkModeModal
+                        darkModeEnabled={isDarkModeEnabled}
+                        onDarkModeToggle={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
+                    />
+                    <TouchableOpacity style={styles.closeModalButton} onPress={toggleModal}>
+                        <Text style={styles.closeModalButtonText}>Close</Text>
+                    </TouchableOpacity>
+                </Modal>
             </View>
         </View>
-        
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fafafa',// everwhere except the margin and the header
+        backgroundColor: '#fafafa',
         paddingHorizontal: 8,
         marginVertical: 0,
     },
@@ -86,8 +94,6 @@ const styles = StyleSheet.create({
     headerContent: {
         flexDirection: 'row',
         alignItems: 'center',
-
-        
     },
     icon: {
         marginRight: 16,
@@ -102,7 +108,7 @@ const styles = StyleSheet.create({
     },
     profileInfo: {
         marginTop: 20,
-        backgroundColor: '#fafafa',  //for the space between the infoitem and the next  
+        backgroundColor: '#fafafa',
     },
     infoItem: {
         flexDirection: 'row',
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 8, // Adding borderRadius here
+        borderRadius: 8,
         marginBottom: 10,
         backgroundColor: '#fff',
     },
@@ -123,9 +129,7 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 16,
         fontFamily: 'Asap-Light',
-        fontWeight: '500'
-
-    
+        fontWeight: '500',
     },
     number: {
         fontSize: 14,
@@ -133,10 +137,19 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#333',
     },
-    contactInfo:{
+    contactInfo: {
         flexDirection: 'column',
         justifyContent: 'space-between',
-    }
+    },
+    closeModalButton: {
+        backgroundColor: '#f0f0f0',
+        padding: 16,
+        alignItems: 'center',
+    },
+    closeModalButtonText: {
+        fontSize: 16,
+        fontFamily: 'Asap-Medium',
+    },
 });
 
 export default ProfilePage;

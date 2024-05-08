@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 8,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
     fontFamily: 'Asap-Regular',
-    color: '#939394',
+    color: '#86868b',
   },
 });
 

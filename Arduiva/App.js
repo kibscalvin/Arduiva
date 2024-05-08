@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import ActivityPage from './screens/ActivityPage';
 import ServicesPage from './screens/ServicesPage';
 import ProfilePage from './screens/ProfilePage';
+import EPayPage from './screens/EPayPage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 
@@ -20,6 +21,7 @@ export default function App() {
     'Asap-SemiBold': require('./assets/fonts/Asap-SemiBold.ttf'),
     'Asap-Light': require('./assets/fonts/Asap-Light.ttf'),
     'Asap-MediumItalic': require('./assets/fonts/Asap-MediumItalic.ttf'),
+    'PTMono-Regular': require('./assets/fonts/PTMono-Regular.ttf'),
   });
   if (!loaded) {
     return null; // Render null while fonts are loading
@@ -35,46 +37,58 @@ export default function App() {
             tabBarActiveTintColor: '#054405', // Change the active icon color here
             tabBarStyle: { backgroundColor: '#fff' },
             tabBarLabelStyle: { fontSize: 12, fontFamily: 'Asap-Regular', marginBottom: 4 },
-            headerStyle: { backgroundColor: '#fff', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 5},
+            headerStyle: { backgroundColor: '#fff', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 5, shadowColor : 'gray'},
             headerStatusBarHeight: 50,
             headerTitleStyle: { fontSize: 28, fontFamily: 'Asap-SemiBold' },
           }}
         >
+              <Tab.Screen
+            name="Services"
+            component={ServicesPage}
+            options={{
+              tabBarLabel: 'Services',
+              tabBarIcon: ({ color }) => <Ionicons name="hammer-outline" size={20} color={color} />, // Pass color prop to icon
+              headerStyle: { backgroundColor: '#F3F6FC', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 0},
+              tabBarStyle: { backgroundColor: '#F3F6FC' },
+            }}
+          />
+           <Tab.Screen
+            name="Activity"
+            component={ActivityPage}
+            options={{
+              tabBarLabel: 'Activity',
+              tabBarIcon: ({ color }) => <Ionicons name="receipt-outline" size={20} color={color} />, // Pass color prop to icon
+            }}
+          />
           <Tab.Screen
             name="Home"
             component={HomeScreen}
             options={{
               tabBarLabel: 'Home',
-              tabBarIcon: ({ color }) => <Ionicons name="home" size={20} color={color} />, // Pass color prop to icon
+              tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={20} color={color} />, // Pass color prop to icon
               headerTitle: 'Arduiva',
             }}
           />
-          <Tab.Screen
-            name="Activity"
-            component={ActivityPage}
-            options={{
-              tabBarLabel: 'Activity',
-              tabBarIcon: ({ color }) => <Ionicons name="book" size={20} color={color} />, // Pass color prop to icon
-            }}
+            <Tab.Screen 
+          name = 'E_Pay'
+          component = {EPayPage}
+          options = {{
+            tabBarLabel: 'E-Pay',
+            tabBarIcon: ({ color }) => <Ionicons name="card-outline" size={20} color={color} />, // Pass color prop to icon
+          
+          }}
           />
-          <Tab.Screen
-            name="Services"
-            component={ServicesPage}
-            options={{
-              tabBarLabel: 'Services',
-              tabBarIcon: ({ color }) => <Ionicons name="settings" size={20} color={color} />, // Pass color prop to icon
-              headerStyle: { backgroundColor: '#F3F6FC', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 0},
-              tabBarStyle: { backgroundColor: '#F3F6FC' },
-            }}
-          />
+         
+      
           <Tab.Screen
             name="Profile"
             component={ProfilePage}
             options={{
               tabBarLabel: 'Profile',
-              tabBarIcon: ({ color }) => <Ionicons name="person" size={20} color={color} />, // Pass color prop to icon
+              tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={20} color={color} />, // Pass color prop to icon
             }}
           />
+        
         </Tab.Navigator>
         
       </NavigationContainer>
