@@ -8,6 +8,7 @@ import ActivityPage from './screens/ActivityPage';
 import ServicesPage from './screens/ServicesPage';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import PaymentOptionsPage from './screens/PaymentsMethods';
 import EPayPage from './screens/EPayPage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
@@ -45,7 +46,14 @@ function ProfileStack({navigation, route}) {
         headerTitle: 'Settings',
         tabBarVisible: false,
         }} 
+        
         />
+        <Stack.Screen name = 'Payments' component = {PaymentOptionsPage}
+        options = {{
+          headerTitle: 'Payment Methods',
+        }}
+          />
+        
     </Stack.Navigator>
   );
 }

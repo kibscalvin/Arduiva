@@ -21,6 +21,9 @@ const ProfilePage = () => {
     const goToSettings = () => {
         navigation.navigate('Settings');
     }
+    const goToPayments = () => {
+        navigation.navigate('Payments')
+    }
 
     return (
         <View style={styles.container}>
@@ -47,10 +50,10 @@ const ProfilePage = () => {
                     </View>
                     <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.infoItem}>
+                <TouchableOpacity style={styles.infoItem} onPress ={goToPayments}>
                     <View style={styles.infoContent}>
                         <FontAwesomeIcon icon={faCreditCard} size={20} color="#000" style={styles.icon} />
-                        <Text style={styles.infoText}>Payments</Text>
+                        <Text style={styles.infoText}>Payment Methods</Text>
                     </View>
                     <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
                 </TouchableOpacity>
