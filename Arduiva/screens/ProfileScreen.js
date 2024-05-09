@@ -3,6 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser, faCog, faCreditCard, faUserCog, faGavel, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import DarkModeModal from '../components/modals/darkModeModal'; // Import the modal content
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
+
+
 
 const ProfilePage = () => {
     const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
@@ -11,6 +16,11 @@ const ProfilePage = () => {
     const toggleModal = () => {
         setIsModalVisible(!isModalVisible);
     };
+
+    const navigation = useNavigation();
+    const goToSettings = () => {
+        navigation.navigate('Settings');
+    }
 
     return (
         <View style={styles.container}>
@@ -30,7 +40,7 @@ const ProfilePage = () => {
 
             {/* Profile Info */}
             <View style={styles.profileInfo}>
-                <TouchableOpacity style={styles.infoItem}>
+                <TouchableOpacity style={styles.infoItem} onPress={goToSettings}>
                     <View style={styles.infoContent}>
                         <FontAwesomeIcon icon={faCog} size={20} color="#000" style={styles.icon} />
                         <Text style={styles.infoText}>Settings</Text>
