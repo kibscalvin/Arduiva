@@ -45,12 +45,16 @@ function ProfileStack({navigation, route}) {
       options={{
         headerTitle: 'Settings',
         tabBarVisible: false,
+        headerStyle : { backgroundColor: '#F3F6FC', borderBottomWidth: 1, borderColor: '#ccc', elevation: 5, shadowColor: 'gray'}
+
         }} 
         
         />
         <Stack.Screen name = 'Payments' component = {PaymentOptionsPage}
         options = {{
           headerTitle: 'Payment Methods',
+          headerStyle : { backgroundColor: '#F3F6FC', borderBottomWidth: 1, borderColor: '#ccc', elevation: 5, shadowColor: 'gray'}
+
         }}
           />
         

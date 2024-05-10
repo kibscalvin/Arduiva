@@ -33,7 +33,7 @@ const SettingsPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3F6FC',
     padding: 20,
   },
   category: {
