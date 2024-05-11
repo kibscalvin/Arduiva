@@ -31,7 +31,7 @@ const ProfilePage = () => {
             <TouchableOpacity onPress={toggleModal}>
                 <View style={styles.headerContainer}>
                     <View style={styles.headerContent}>
-                        <FontAwesomeIcon icon={faUser} size={20} color="#D1EDC0" style={styles.icon} />
+                        <FontAwesomeIcon icon={faUser} size={26} color="#D1EDC0" style={styles.icon} />
                         <View style={styles.contactInfo}>
                             <Text style={styles.userName}>Kibirige Calvin</Text>
                             <Text style={styles.number}>+25675910888</Text>

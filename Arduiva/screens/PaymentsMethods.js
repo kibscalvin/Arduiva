@@ -20,18 +20,18 @@ const PaymentOptionsPage = () => {
         
      <View style = {styles.childContainer}>
      <TouchableOpacity
-        style={[styles.option, selectedOption === 'cash' && styles.selectedOption]}
+        style={[styles.option, selectedOption === 'cash' && styles.selectedOptionCash]}
         onPress={() => handleOptionSelect('cash')}
       >
-        <FontAwesome name="money" size={24} color="#000" />
-        <Text style={styles.optionText}>Cash</Text>
+        <FontAwesome name="money" size={24} color="#00be76" />
+        <Text style={[styles.optionText, {color: '#00be76'}]}>Cash</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.option, selectedOption === 'ePay' && styles.selectedOption]}
+        style={[styles.option, selectedOption === 'ePay' && styles.selectedOptionEpay]}
         onPress={() => handleOptionSelect('ePay')}
       >
-        <FontAwesome name="credit-card" size={24} color="#000" />
-        <Text style={styles.optionText}>E-Pay</Text>
+        <FontAwesome name="credit-card" size={24} color="#1896c9" />
+        <Text style={[styles.optionText, {color : '#1896c9'}]}>E-Pay</Text>
       </TouchableOpacity>
      </View>
      <View style = {styles.depositTextContainer} >
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F6FC',
     alignItems: 'center',
     //justifyContent: 'center',
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+   // backgroundColor: '#f4f9e6'
   },
   childContainer : {
     flexDirection: 'row',
@@ -136,6 +137,20 @@ const styles = StyleSheet.create({
     elevation: 5, // Set the elevation (Android only)
     backgroundColor: '#F3F6FC', // Set a background color
     shadowColor: 'green', // Set a shadow color
+  },
+  selectedOptionCash: {
+    borderColor: 'green', // Green color for selected option( thinl about this one E1FF40)
+    elevation: 5, // Set the elevation (Android only)
+    backgroundColor: '#e4f7ee', // Set a background color
+    shadowColor: 'green', // Set a shadow color
+
+  },
+  selectedOptionEpay:{
+    borderColor: '#1896c9', // Green color for selected option( thinl about this one E1FF40)
+    elevation: 5, // Set the elevation (Android only)
+    backgroundColor: '#e1f7fc', // Set a background color
+    shadowColor: 'green', // Set a shadow color
+
   },
   optionText: {
     marginLeft: 10,
