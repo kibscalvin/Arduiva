@@ -10,10 +10,15 @@ import ProfileScreen from './screens/ProfileScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import PaymentOptionsPage from './screens/PaymentsMethods';
 import EPayPage from './screens/EPayPage';
+import FuelScreen from './screens/FuelScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFonts } from 'expo-font';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import MechanicScreen from './screens/MechanicScreen';
+
+//wrap the main app in a provider to allow for global state management
+
 
 const Stack = createStackNavigator();
 function ProfileStack({navigation, route}) {
@@ -57,12 +62,47 @@ function ProfileStack({navigation, route}) {
 
         }}
           />
-        
+          
     </Stack.Navigator>
   );
 }
 
 
+const MechanicStack = () =>{
+  return (
+    <Stack.Navigator screenOptions={(route) => ({
+      headerStyle: { backgroundColor: '#fff', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 5, shadowColor : 'gray'},
+      headerStatusBarHeight: 50,
+      headerTitleStyle: { fontSize: 28, fontFamily: 'Asap-SemiBold' },
+      gestureDirection: 'horizontal',
+      ...TransitionPresets.SlideFromRightIOS, 
+    })}
+    >
+      <Stack.Screen name="Mechanic" component={MechanicScreen} 
+      options={{
+        headerTitle : 'Mechanic',
+        }} 
+        />
+    </Stack.Navigator>
+  );
+}
+
+
+
+    <Stack.Navigator screenOptions={(route) => ({
+      headerStyle: { backgroundColor: '#fff', height: 100, borderBottomWidth: 1, borderColor: '#ccc', elevation: 5, shadowColor : 'gray'},
+      headerStatusBarHeight: 50,
+      headerTitleStyle: { fontSize: 28, fontFamily: 'Asap-SemiBold' },
+      gestureDirection: 'horizontal',
+      ...TransitionPresets.SlideFromRightIOS, 
+    })}
+    >
+      <Stack.Screen name="Mechanic" component={MechanicScreen} 
+      options={{
+        headerTitle : 'Mechanic',
+        }} 
+        />
+    </Stack.Navigator>
 
 
 const getTabBarVisibility = (route) => {
@@ -92,7 +132,7 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <NavigationContainer>
-  <Tab.Navigator
+   <Tab.Navigator
     initialRouteName="Home"
     screenOptions={({ route }) => ({
       tabBarActiveTintColor: '#054405', // Change the active icon color here
@@ -150,7 +190,7 @@ export default function App() {
   </Tab.Navigator>
 </NavigationContainer>
 
-        
+
       
       
     </View>
