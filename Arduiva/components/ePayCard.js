@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',   
     elevation: 8,
   },
   cardContainer: {

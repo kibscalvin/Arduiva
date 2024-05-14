@@ -17,5 +17,7 @@ export default function EPayPage() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 8,
+    backgroundColor: '#fafafa',
+    flex: 1
   }
 })
