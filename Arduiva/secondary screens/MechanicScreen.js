@@ -1,56 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
-import Modal from 'react-native-modal';
-import { Button } from 'react-native';
+import React, { useRef, useMemo } from 'react';
+import { StyleSheet, View, SafeAreaView, Dimensions } from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import MapView, { Marker } from 'react-native-maps';
+import MechanicBottomSheetContent from '../components/modals/BottomSheets/MechanicBottomSheetContent';
 
 const MechanicScreen = () => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [animation] = useState(new Animated.Value(0));
+    const sheetRef = useRef(null);
+    const snapPoints = useMemo(() => ['25%', '50%'], []);
 
-    useEffect(() => {
-        setIsVisible(true);
-        Animated.timing(animation, {
-            toValue: 1,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-    }, []);
+    const handleSheetChanges = (index) => {
+        console.log('handleSheetChanges', index);
+    };
 
     const closeBottomSheet = () => {
-        setIsVisible(false);
+        sheetRef.current?.close();
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.mapsView}>
-                <Text>Mechanic Screen</Text>
-                <TouchableOpacity onPress={closeBottomSheet}>
-                    <Text>Close Bottom Sheet</Text>
-                </TouchableOpacity>
-            </View>
-            <Modal
-                isVisible={isVisible}
-                backdropOpacity={0.5}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
-                animationInTiming={500}
-                animationOutTiming={500}
-                backdropTransitionInTiming={500}
-                backdropTransitionOutTiming={500}
-                style={styles.modal}
-                onSwipeComplete={() => setIsVisible(false)}
-                swipeDirection={['down', 'up']}
-                propagateSwipe={true}
-                gestureEnabled={true}
-            >
-                <View style={styles.modalContent}>
-                    <Text>Bottom Sheet Content</Text>
-                    <Button title="Close" onPress={closeBottomSheet} />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.mapsView}>
+                    <MapView
+                        style={styles.map}
+                        initialRegion={{
+                            latitude: 0.3476,
+                            longitude: 32.5825,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                        }}
+                    >
+                        <Marker
+                            coordinate={{ latitude: 0.3476, longitude: 32.5825 }}
+                            title={"Mechanic Location"}
+                            description={"This is where the mechanic is located"}
+                        />
+                    </MapView>
                 </View>
-            </Modal>
-        </SafeAreaView>
+                <BottomSheet
+                    ref={sheetRef}
+                    index={0}
+                    snapPoints={snapPoints}
+                    onChange={handleSheetChanges}
+                    style={styles.bottomSheet}
+                    backgroundComponent={() => null} // Disable background interaction
+                >
+                    <View style={styles.sheetContent}>
+                        <MechanicBottomSheetContent />
+                    </View>
+                </BottomSheet>
+            </SafeAreaView>
+        </GestureHandlerRootView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -62,17 +64,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    modal: {
-        justifyContent: 'flex-end',
-        margin: 0,
+    map: {
+        ...StyleSheet.absoluteFillObject,
     },
-    modalContent: {
+    bottomSheet: {
+        backgroundColor: 'transparent', // Make background transparent
+    },
+    sheetContent: {
         backgroundColor: 'white',
-        padding: 22,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        padding: 10,
+        minHeight: Dimensions.get('window').height * 0.5, // Set minimum height
+        borderRadius: 14,
     },
 });
 
