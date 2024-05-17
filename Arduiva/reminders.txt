@@ -15,3 +15,46 @@ nice very dark blue sort of color - alongside #F5FFCD for certain text, you'll k
 
 
 F8FAFD.  git
+
+
+
+
+Define Actions:
+
+Create action types in actionTypes.js.
+Create action creators in actions.js to generate actions.
+Create Reducers:
+
+Define initial state and reducer functions in reducers.js.
+Handle actions in the reducer functions to update the state.
+Combine Reducers:
+
+Combine multiple reducers into a single root reducer using combineReducers in reducers.js.
+Create Store:
+
+Import createStore from Redux in store.js.
+Create the Redux store by passing the root reducer to createStore.
+Export the created store from store.js.
+Connect Components:
+
+Import connect from react-redux in your components.
+Connect the components to the Redux store using the connect function.
+Map State to Props:
+
+Define mapStateToProps function in your components to map the Redux state to component props.
+Use mapStateToProps to access the Redux state in the component.
+Dispatch Actions:
+
+Use mapDispatchToProps function in your components to map action creators to component props.
+Dispatch actions by calling the mapped action creators in your components.
+Subscribe to Store Changes:
+
+Subscribe to store changes using the useSelector hook or connect function in your components.
+Update component state or UI based on store changes.
+Dispatch Thunks or Async Actions (optional):
+
+If needed, use middleware like redux-thunk to handle asynchronous actions or side effects.
+Create thunks or async action creators to dispatch asynchronous actions.
+Handle Side Effects (optional):
+
+Use middleware like redux-saga or redux-observable to handle complex side effects or asynchronous logic.

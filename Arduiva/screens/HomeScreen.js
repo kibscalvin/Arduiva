@@ -1,21 +1,24 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+//import {React, useState} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons, but i dont need them
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { faBoltLightning, faCarBattery } from '@fortawesome/free-solid-svg-icons';
+import { faRobot } from '@fortawesome/free-solid-svg-icons';
+import { faAppleWhole, faBoltLightning, faCarBattery } from '@fortawesome/free-solid-svg-icons';
 import { faGasPump } from '@fortawesome/free-solid-svg-icons';
 import { faTruckLoading } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
+
 import { createStackNavigator } from '@react-navigation/stack';
-//import MechanicScreen from './screens/MechanicScreen';
 
 
 
-
+//i
 const HomeScreen = () => {
     const name = 'Calvin'; // Define my name here, i like how it looks
     const currentLocation = 'Kyanja, Uganda'
+    //const[modalVisible, setModalVisible] = useState(false)
+
 
    const navigation = useNavigation();
 
@@ -23,16 +26,21 @@ const HomeScreen = () => {
     function hasPressed(){
         console.log('pressed')
     }
-
+        const toggleLocation = () => {
+        //setModalVisible(!modalVisible);
+    }
     return (
         <View style={styles.container}>
                                   {/* HelloContainer*/}
             <View style={styles.helloContainer}>
                 <Text style={styles.helloText}><Text style = {{color: '#86868b'}}>Hello,</Text> {name}</Text>
-                <View style = {styles.locationContainer}>
+                <TouchableOpacity onPress = {() => navigation.navigate('Location')}>
+                <View style = {styles.locationContainer} >
                 <Ionicons name="location" size={24} color="#161818" />
                 <Text style = {styles.locationText }>{currentLocation}</Text>
                 </View>
+
+                </TouchableOpacity>
             </View>
             {/* MainContainer*/}
             <View style={styles.mainContainer}>
@@ -55,6 +63,12 @@ const HomeScreen = () => {
 
                         <Text style={[styles.gridText, {color: '#0a99f5'}, {fontSize: 17}]}>Mechanic</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style = {styles.aiChat}>
+                            <FontAwesomeIcon icon = {faRobot} size = {24} color = '#86868b' />
+
+                        </View>
+                        </TouchableOpacity>
                 {/* blehh*/}
                 </View>
                 <View style={styles.gridContainer}>
@@ -73,12 +87,14 @@ const HomeScreen = () => {
             <View style = {{flexDirection:'column'}}>
                 <TouchableOpacity>
                 <View style = {styles.contactContainer}>
-                    <Text style = {styles.contactText}>Emergency Contacts</Text>
+                    <Text style = {styles.contactText}>Tips</Text>
                 </View>
                 
 
                 </TouchableOpacity>
                 <Text style = {styles.VersionNumber}>Arduiva Beta 0.0.1</Text>
+            
+                
 
             </View>
         </View>
@@ -90,6 +106,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 16,
+    },
+    aiChat : {
+        borderRadius: 100,
+        borderWidth:1,
+        borderColor: '#008000',
+        position: 'absolute',
+        bottom: 108, 
+        right: 14.5,
+        padding: 10,
+
     },
     helloContainer: {
         marginTop: 20,
@@ -159,7 +185,25 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: 'Asap-Medium',
         color: 'black'
-    }
-});
+    },
+    modal: {
+        //flex: 1,
+        backgroundColor: 'red', // Background color with transparency
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        backgroundColor: '#f8fff1', // Background color of the modal content
+        padding: 20,
+        borderRadius: 16,
+        flex: 1,
+        marginHorizontal: 8,
+        borderWidth: 1,
+        marginBottom: 8,
+        },
+    });
+
+    
+      
 
 export default HomeScreen;

@@ -13,9 +13,9 @@ const ProfilePage = () => {
     const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const toggleModal = () => {
-        setIsModalVisible(!isModalVisible);
-    };
+    // const toggleModal = () => {
+    //     setIsModalVisible(!isModalVisible);
+    // };
 
     const navigation = useNavigation();
     const goToSettings = () => {
@@ -24,11 +24,15 @@ const ProfilePage = () => {
     const goToPayments = () => {
         navigation.navigate('Payments')
     }
+    const toUserInfo = () => {
+        navigation.navigate('UserInfo')
+    }
+
 
     return (
         <View style={styles.container}>
             {/* Header Container */}
-            <TouchableOpacity onPress={toggleModal}>
+            <TouchableOpacity onPress={toUserInfo}>
                 <View style={styles.headerContainer}>
                     <View style={styles.headerContent}>
                         <FontAwesomeIcon icon={faUser} size={26} color="#D1EDC0" style={styles.icon} />
@@ -71,15 +75,7 @@ const ProfilePage = () => {
                     </View>
                     <FontAwesomeIcon icon={faAngleRight} size={20} color="#000" />
                 </TouchableOpacity>
-                <Modal visible={isModalVisible} animationType="slide">
-                    <DarkModeModal
-                        darkModeEnabled={isDarkModeEnabled}
-                        onDarkModeToggle={() => setIsDarkModeEnabled(!isDarkModeEnabled)}
-                    />
-                    <TouchableOpacity style={styles.closeModalButton} onPress={toggleModal}>
-                        <Text style={styles.closeModalButtonText}>Close</Text>
-                    </TouchableOpacity>
-                </Modal>
+               
             </View>
         </View>
     );
