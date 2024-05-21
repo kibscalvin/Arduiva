@@ -1,10 +1,11 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, ActivityIndicator, TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, ActivityIndicator, TouchableOpacity, Pressable, Linking } from 'react-native';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import MapViewDirections from 'react-native-maps-directions';
 
 const MechanicScreen = ({ navigation }) => {
     const sheetRef = useRef(null);
@@ -45,9 +46,14 @@ const MechanicScreen = ({ navigation }) => {
                 { id: '18', name: 'Mechanic 18', distance: '18.4 km' },
                 { id: '19', name: 'Mechanic 19', distance: '19.1 km' },
                 { id: '20', name: 'Mechanic 20', distance: '20.5 km' },
-                // Add more mechanics data here
             ];
-            setMechanics(fetchedMechanics);
+            // Generate random coordinates within Uganda for each mechanic
+            const mechanicsWithCoordinates = fetchedMechanics.map(mechanic => ({
+                ...mechanic,
+                latitude: 1 + Math.random() * (4 - 1), // Latitude within Uganda
+                longitude: 30 + Math.random() * (35 - 30) // Longitude within Uganda
+            }));
+            setMechanics(mechanicsWithCoordinates);
             setLoading(false);
         }, 2000); // Simulating a network request
     }, []);
@@ -70,10 +76,16 @@ const MechanicScreen = ({ navigation }) => {
 
     const handleMechanicSelect = (mechanic) => {
         setSelectedMechanic(mechanic);
+        mapRef.current.animateToRegion({
+            latitude: mechanic.latitude,
+            longitude: mechanic.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+        }, 1000); // Animate to the selected mechanic's location
     };
 
-    const navigateToDetail = () => {
-        navigation.navigate('MechanicDetail', { mechanic: selectedMechanic });
+    const navigateToMechanic = () => {
+        console.log(latitude, longitude);
     };
 
     const renderItem = ({ item, index }) => (
@@ -102,15 +114,25 @@ const MechanicScreen = ({ navigation }) => {
                         style={styles.map}
                         region={region} // Use state region
                         onRegionChangeComplete={setRegion} // Update region state on change
+                        mapType = 'mutedStandard'
                     >
-                        <Marker
-                            coordinate={{ latitude: 0.3476, longitude: 32.5825 }}
-                            title="Mechanic Location"
-                            description="This is where the mechanic is located"
-                            onPress={() => {
-                                sheetRef.current?.snapToIndex(1); // Open the bottom sheet to half height
-                            }}
-                        />
+                        {/* <MapViewDirections
+                            origin={}
+                            destination={destination}
+                            apikey= {AIzaSyDpyua0aRGqTTCPCKvoQYNJhk7YNxLyvSI}
+                            strokeWidth={3}
+                            strokeColor="hotpink"
+                        
+                        /> */}
+                        {mechanics.map((mechanic) => (
+                            <Marker
+                                key={mechanic.id}
+                                coordinate={{ latitude: mechanic.latitude, longitude: mechanic.longitude }}
+                                title={mechanic.name}
+                                description={mechanic.distance}
+                                onPress={() => handleMechanicSelect(mechanic)}
+                            />
+                        ))}
                     </MapView>
                     <TouchableOpacity>
                         <FontAwesomeIcon icon={faChevronCircleLeft} size={38} color='gray' style={{ position: 'absolute', bottom: 330, right: 144 }} />
@@ -140,9 +162,9 @@ const MechanicScreen = ({ navigation }) => {
                 </BottomSheet>
                 <View style={styles.bottomSheetFooter}>
                     {selectedMechanic && (
-                        <Pressable onPress={navigateToDetail} style={styles.pressable}>
+                        <Pressable onPress={navigateToMechanic} style={styles.pressable}>
                             <Text style={styles.pressableText}>
-                                {selectedMechanic.name} - {selectedMechanic.distance}
+                                Navigate to {selectedMechanic.name}
                             </Text>
                         </Pressable>
                     )}
@@ -223,7 +245,7 @@ const styles = StyleSheet.create({
     bottomSheetFooter: {
         backgroundColor: 'white',
         borderTopWidth: 1,
-        borderTopColor: '#000',
+        borderTopColor: '#d3d3d3',
         height: 120,
         justifyContent: 'center',
         alignItems: 'center',
