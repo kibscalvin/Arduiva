@@ -1,6 +1,7 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentLocation, setCurrentLocation, setServiceProviderLocation, selectServiceProviderLocation } from '../Redux/slices/navSlice';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
@@ -8,10 +9,22 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 // Function to generate random coordinates within a 20km radius
 const generateRandomCoordinates = (lat, lng, radius = 20000) => {
-    const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius / 111300; // 1 degree of latitude is approximately 111.3 km
+    const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius; // Random offset within the radius
 
-    const randomLat = lat + getRandomOffset();
-    const randomLng = lng + getRandomOffset() / Math.cos(lat * Math.PI / 180);
+    const earthRadius = 6371; // Radius of the Earth in kilometers
+
+    const getRandomDistance = () => Math.sqrt(Math.random()) * radius; // Random distance within the radius
+
+    const getRandomAngle = () => Math.random() * 2 * Math.PI; // Random angle in radians
+
+    const dx = getRandomDistance() / earthRadius; // Convert distance to radians
+    const angle = getRandomAngle();
+
+    const deltaLat = dx * Math.cos(angle);
+    const deltaLng = dx * Math.sin(angle);
+
+    const randomLat = lat + deltaLat;
+    const randomLng = lng + deltaLng;
 
     return { latitude: randomLat, longitude: randomLng };
 };
@@ -25,7 +38,7 @@ export const MechanicScreen = () => {
     const snapPoints = useMemo(() => ['25%', '50%'], []);
     const [mechanics, setMechanics] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedMechanicId, setSelectedMechanicId] = useState(null);
+    const [selectedMechanic, setSelectedMechanic] = useState(null);
     const [currentSnapIndex, setCurrentSnapIndex] = useState(0);
 
     useEffect(() => {
@@ -34,12 +47,12 @@ export const MechanicScreen = () => {
 
             console.log('Fetching mechanics...');
             setTimeout(() => {
-                const fetchedMechanics = Array.from({ length: 10 }).map((_, index) => {
+                const fetchedMechanics = Array.from({ length: 5 }).map((_, index) => {
                     const randomCoordinates = generateRandomCoordinates(lat, lng);
                     return {
                         id: `${index + 1}`,
                         name: `Mechanic ${index + 1}`,
-                        distance: `${(Math.random() * 5).toFixed(1)} km`, // adjust the test distance for the mechanics
+                        distance: `${(Math.random() * 10 + 1).toFixed(1)} km`, // Random distance between 1 and 10 km
                         coordinates: randomCoordinates,
                     };
                 });
@@ -50,6 +63,15 @@ export const MechanicScreen = () => {
             }, 2000); // Simulating a network request
         }
     }, [currentLocation]);
+
+    useEffect(() => {
+        if (currentLocation?.location && serviceProviderLocation?.coordinates) {
+            mapRef.current.fitToSuppliedMarkers(['currentLocation', 'serviceProviderLocation'], {
+                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                animated: true,
+            });
+        }
+    }, [currentLocation, serviceProviderLocation]);
 
     const handleSearchSubmit = (data, details = null) => {
         if (details && details.geometry) {
@@ -74,9 +96,12 @@ export const MechanicScreen = () => {
         <TouchableOpacity
             style={[
                 styles.item,
-                selectedMechanicId === item.id && { borderColor: 'black' }
+                selectedMechanic?.id === item.id && { borderColor: 'black' }
             ]}
-            onPress={() => setSelectedMechanicId(item.id)}
+            onPress={() => {
+                setSelectedMechanic(item);
+                dispatch(setServiceProviderLocation(item));
+            }}
         >
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.distance}>{item.distance}</Text>
@@ -137,18 +162,6 @@ export const MechanicScreen = () => {
                         longitudeDelta: 0.005,
                     } : undefined}
                 >
-{/* 
-                    {currentLocation && serviceProviderLocation &&(
-                        <MapViewDirections
-                            currentLocation={currentLocation.description}
-                            serviceProviderLocation={serviceProviderLocation.description}
-                            apiKey = {AIzaSyBnFhnXkBxly_Yu_PehfSeoaJlDs6WwP-Y}
-                            strokeWidth={3}
-                            strokeColor="hotpink"
-                        />
-                    )} */}
-
-
                     {currentLocation?.location?.lat && (
                         <Marker
                             coordinate={{
@@ -159,22 +172,29 @@ export const MechanicScreen = () => {
                             description="You are here"
                             identifier="currentLocation"
                         />
+                    )}
 
-                        
-
-                        
-
-                    )}  
                     {mechanics.map(mechanic => (
                         <Marker
                             key={mechanic.id}
                             coordinate={mechanic.coordinates}
                             title={mechanic.name}
                             description={mechanic.distance}
-                            pinColor={selectedMechanicId === mechanic.id ? 'blue' : 'green'}
-                            onPress={() => setSelectedMechanicId(mechanic.id)}
+                            pinColor={selectedMechanic?.id === mechanic.id ? 'blue' : 'green'}
+                            onPress={() => setSelectedMechanic(mechanic)}
+                            identifier="serviceProviderLocation"
                         />
                     ))}
+
+                    {currentLocation && selectedMechanic && (
+                        <MapViewDirections
+                            origin={{ latitude: currentLocation.location.lat, longitude: currentLocation.location.lng }}
+                            destination={selectedMechanic.coordinates}
+                            apikey="YOUR_GOOGLE_MAPS_API_KEY"
+                            strokeWidth={3}
+                            strokeColor="black"
+                        />
+                    )}
                 </MapView>
             </View>
             <BottomSheet
