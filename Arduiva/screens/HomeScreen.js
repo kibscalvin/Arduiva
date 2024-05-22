@@ -7,7 +7,7 @@ import { faRobot } from '@fortawesome/free-solid-svg-icons';
 import { faCarBattery, faGasPump, faTruckLoading } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { GOOGLE_MAPS_APIKEY } from '@env';
+//import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useDispatch } from 'react-redux';
 import { setCurrentLocation, setServiceProviderLocation } from '../Redux/slices/navSlice';
 
@@ -89,7 +89,7 @@ const HomeScreen = () => {
                 <Text style={styles.VersionNumber}>Arduiva Beta 0.0.1</Text>
             </View>
 
-            <Modal
+            {/* <Modal
                 animationType="fade"
                 transparent={true}
                 visible={modalVisible}
@@ -121,6 +121,7 @@ const HomeScreen = () => {
                                 enablePoweredByContainer={false}
                                 minLength={2}
                                 fetchDetails={true}
+                                predefinedPlaces={[{ description: 'Kyanja, Uganda' }]}
                                // currentLocation={true}
                                // currentLocationLabel='Current location'
                                 returnKeyType={'search'}
@@ -152,7 +153,7 @@ const HomeScreen = () => {
                         </View>
                     </View>
                 </Animated.View>
-            </Modal>
+            </Modal> */}
         </View>
     );
 };
