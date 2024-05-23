@@ -6,9 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentLocation, setCurrentLocation, setServiceProviderLocation, selectServiceProviderLocation } from '../Redux/slices/navSlice';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GOOGLE_MAPS_API_KEY } from '@env';
 
 // Function to generate random coordinates within a 20km radius
-const generateRandomCoordinates = (lat, lng, radius = 20000) => {
+const generateRandomCoordinates = (lat, lng, radius = 1000) => {
     const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius; // Random offset within the radius
 
     const earthRadius = 6371; // Radius of the Earth in kilometers
@@ -40,6 +41,7 @@ export const MechanicScreen = () => {
     const [loading, setLoading] = useState(true);
     const [selectedMechanic, setSelectedMechanic] = useState(null);
     const [currentSnapIndex, setCurrentSnapIndex] = useState(0);
+    const [region, setRegion] = useState(null); // Add region state
 
     useEffect(() => {
         if (currentLocation?.location) {
@@ -64,14 +66,50 @@ export const MechanicScreen = () => {
         }
     }, [currentLocation]);
 
+    const adjustMapPadding = (snapIndex) => {
+        const paddingMap = {
+            0: { top: 100, right: 100, bottom: 300, left: 100 },
+            1: { top: 100, right: 100, bottom: 700, left: 100 },
+        };
+
+        return paddingMap[snapIndex] || { top: 100, right: 100, bottom: 100, left: 100 };
+    };
+
     useEffect(() => {
         if (currentLocation?.location && serviceProviderLocation?.coordinates) {
             mapRef.current.fitToSuppliedMarkers(['currentLocation', 'serviceProviderLocation'], {
-                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                edgePadding: adjustMapPadding(currentSnapIndex),
                 animated: true,
             });
         }
+    }, [currentLocation, serviceProviderLocation, currentSnapIndex]);
+
+    // Update region state when current location or service provider location changes
+    useEffect(() => {
+        if (currentLocation?.location && serviceProviderLocation?.coordinates) {
+            const { lat: lat1, lng: lng1 } = currentLocation.location;
+            const { latitude: lat2, longitude: lng2 } = serviceProviderLocation.coordinates;
+
+            const midLat = (lat1 + lat2) / 2;
+            const midLng = (lng1 + lng2) / 2;
+
+            const latDelta = Math.abs(lat1 - lat2) * 1.5; // Adjust the factor to ensure both markers are visible
+            const lngDelta = Math.abs(lng1 - lng2) * 1.5;
+
+            setRegion({
+                latitude: midLat,
+                longitude: midLng,
+                latitudeDelta: latDelta,
+                longitudeDelta: lngDelta,
+            });
+        }
     }, [currentLocation, serviceProviderLocation]);
+
+    useEffect(() => {
+        if (region && mapRef.current) {
+            mapRef.current.animateToRegion(region, 1000); // Animate to the new region over 1 second
+        }
+    }, [region]);
 
     const handleSearchSubmit = (data, details = null) => {
         if (details && details.geometry) {
@@ -152,8 +190,8 @@ export const MechanicScreen = () => {
                     initialRegion={{
                         latitude: 0,
                         longitude: 0,
-                        latitudeDelta: 100,
-                        longitudeDelta: 100,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
                     }}
                     region={currentLocation?.location ? {
                         latitude: currentLocation.location.lat,
@@ -190,9 +228,9 @@ export const MechanicScreen = () => {
                         <MapViewDirections
                             origin={{ latitude: currentLocation.location.lat, longitude: currentLocation.location.lng }}
                             destination={selectedMechanic.coordinates}
-                            apikey="YOUR_GOOGLE_MAPS_API_KEY"
+                            apikey='AIzaSyBnFhnXkBxly_Yu_PehfSeoaJlDs6WwP-Y'
                             strokeWidth={3}
-                            strokeColor="black"
+                            strokeColor="green"
                         />
                     )}
                 </MapView>
@@ -201,7 +239,9 @@ export const MechanicScreen = () => {
                 ref={sheetRef}
                 index={0} // Set to 0 for initial snap point
                 snapPoints={snapPoints}
-                onChange={setCurrentSnapIndex}
+                onChange={(index) => {
+                    setCurrentSnapIndex(index);
+                }}
             >
                 <View style={styles.contentContainer}>
                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 8, justifyContent: 'center' }}>
@@ -245,6 +285,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         fontFamily: 'Asap-Medium',
+        marginBottom: 8,
     },
     item: {
         marginVertical: 8,
