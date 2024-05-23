@@ -1,33 +1,76 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentLocation, setCurrentLocation, setServiceProviderLocation, selectServiceProviderLocation } from '../Redux/slices/navSlice';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { GOOGLE_MAPS_API_KEY } from '@env';
+import { GOOGLE_MAPS_APIKEY } from '@env';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
+import MechanicDetailsBottomSheet from './MechanicDetailsBottomSheet'; // Import the new component
 
-// Function to generate random coordinates within a 20km radius
-const generateRandomCoordinates = (lat, lng, radius = 1000) => {
-    const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius; // Random offset within the radius
-
-    const earthRadius = 6371; // Radius of the Earth in kilometers
-
-    const getRandomDistance = () => Math.sqrt(Math.random()) * radius; // Random distance within the radius
-
-    const getRandomAngle = () => Math.random() * 2 * Math.PI; // Random angle in radians
-
-    const dx = getRandomDistance() / earthRadius; // Convert distance to radians
+const generateRandomCoordinates = (lat, lng, radius = 500) => {
+    const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius;
+    const earthRadius = 6371;
+    const getRandomDistance = () => Math.sqrt(Math.random()) * radius;
+    const getRandomAngle = () => Math.random() * 2 * Math.PI;
+    const dx = getRandomDistance() / earthRadius;
     const angle = getRandomAngle();
-
     const deltaLat = dx * Math.cos(angle);
     const deltaLng = dx * Math.sin(angle);
-
     const randomLat = lat + deltaLat;
     const randomLng = lng + deltaLng;
-
     return { latitude: randomLat, longitude: randomLng };
+};
+
+const MechanicNameRow = ({ selectedMechanic, onPress }) => {
+    const slideAnim = useRef(new Animated.Value(0)).current;
+    const opacityAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        if (selectedMechanic) {
+            Animated.timing(slideAnim, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+
+            Animated.timing(opacityAnim, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(opacityAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [selectedMechanic]);
+
+    const slideInterpolate = slideAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [100, 0]
+    });
+
+    return (
+        <View style={styles.mechanicNameRow}>
+            <Animated.Text style={{ ...styles.nearestMechanicText, transform: [{ translateX: slideInterpolate }], color: '#86868b', fontSize: 18 }}>
+                Nearest mechanic
+            </Animated.Text>
+            {selectedMechanic && (
+                <Animated.View style={{ ...styles.selectedMechanicContainer, opacity: opacityAnim }}>
+                    <Text style={styles.selectedMechanicText} onPress={onPress}>
+                        {selectedMechanic.name}
+                    </Text>
+                    <FontAwesomeIcon icon={faChevronCircleRight} size={20} color="#fff" style={styles.icon} />
+                </Animated.View>
+            )}
+        </View>
+    );
 };
 
 export const MechanicScreen = () => {
@@ -35,18 +78,18 @@ export const MechanicScreen = () => {
     const serviceProviderLocation = useSelector(selectServiceProviderLocation);
     const dispatch = useDispatch();
     const sheetRef = useRef(null);
-    const mapRef = useRef(null); // Add ref for MapView
+    const mapRef = useRef(null);
     const snapPoints = useMemo(() => ['25%', '50%'], []);
     const [mechanics, setMechanics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMechanic, setSelectedMechanic] = useState(null);
     const [currentSnapIndex, setCurrentSnapIndex] = useState(0);
-    const [region, setRegion] = useState(null); // Add region state
+    const [region, setRegion] = useState(null);
+    const [isDetailsVisible, setDetailsVisible] = useState(false);
 
     useEffect(() => {
         if (currentLocation?.location) {
             const { lat, lng } = currentLocation.location;
-
             console.log('Fetching mechanics...');
             setTimeout(() => {
                 const fetchedMechanics = Array.from({ length: 5 }).map((_, index) => {
@@ -54,15 +97,14 @@ export const MechanicScreen = () => {
                     return {
                         id: `${index + 1}`,
                         name: `Mechanic ${index + 1}`,
-                        distance: `${(Math.random() * 10 + 1).toFixed(1)} km`, // Random distance between 1 and 10 km
+                        distance: `${(Math.random() * 10 + 1).toFixed(1)} km`,
                         coordinates: randomCoordinates,
                     };
                 });
-
                 console.log('Mechanics fetched:', fetchedMechanics);
                 setMechanics(fetchedMechanics);
                 setLoading(false);
-            }, 2000); // Simulating a network request
+            }, 2000);
         }
     }, [currentLocation]);
 
@@ -71,7 +113,6 @@ export const MechanicScreen = () => {
             0: { top: 100, right: 100, bottom: 300, left: 100 },
             1: { top: 100, right: 100, bottom: 700, left: 100 },
         };
-
         return paddingMap[snapIndex] || { top: 100, right: 100, bottom: 100, left: 100 };
     };
 
@@ -84,18 +125,14 @@ export const MechanicScreen = () => {
         }
     }, [currentLocation, serviceProviderLocation, currentSnapIndex]);
 
-    // Update region state when current location or service provider location changes
     useEffect(() => {
         if (currentLocation?.location && serviceProviderLocation?.coordinates) {
             const { lat: lat1, lng: lng1 } = currentLocation.location;
             const { latitude: lat2, longitude: lng2 } = serviceProviderLocation.coordinates;
-
             const midLat = (lat1 + lat2) / 2;
             const midLng = (lng1 + lng2) / 2;
-
-            const latDelta = Math.abs(lat1 - lat2) * 1.5; // Adjust the factor to ensure both markers are visible
+            const latDelta = Math.abs(lat1 - lat2) * 1.5;
             const lngDelta = Math.abs(lng1 - lng2) * 1.5;
-
             setRegion({
                 latitude: midLat,
                 longitude: midLng,
@@ -107,7 +144,7 @@ export const MechanicScreen = () => {
 
     useEffect(() => {
         if (region && mapRef.current) {
-            mapRef.current.animateToRegion(region, 1000); // Animate to the new region over 1 second
+            mapRef.current.animateToRegion(region, 1000);
         }
     }, [region]);
 
@@ -120,12 +157,10 @@ export const MechanicScreen = () => {
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
             };
-
             dispatch(setCurrentLocation({ location: { lat, lng }, description: data.description }));
             dispatch(setServiceProviderLocation(null));
-
             if (mapRef.current) {
-                mapRef.current.animateToRegion(newRegion, 1000); // Animate to new region over 1 second
+                mapRef.current.animateToRegion(newRegion, 1000);
             }
         }
     };
@@ -155,7 +190,7 @@ export const MechanicScreen = () => {
                     placeholder="Where are you?"
                     onPress={handleSearchSubmit}
                     query={{
-                        key: 'AIzaSyBnFhnXkBxly_Yu_PehfSeoaJlDs6WwP-Y',
+                        key: GOOGLE_MAPS_APIKEY,
                         language: 'en',
                         components: 'country:Ug'
                     }}
@@ -184,7 +219,7 @@ export const MechanicScreen = () => {
             </View>
             <View style={styles.mapScreen}>
                 <MapView
-                    ref={mapRef} // Set the ref to MapView
+                    ref={mapRef}
                     style={{ flex: 1 }}
                     mapType="mutedStandard"
                     initialRegion={{
@@ -211,7 +246,6 @@ export const MechanicScreen = () => {
                             identifier="currentLocation"
                         />
                     )}
-
                     {mechanics.map(mechanic => (
                         <Marker
                             key={mechanic.id}
@@ -223,12 +257,11 @@ export const MechanicScreen = () => {
                             identifier="serviceProviderLocation"
                         />
                     ))}
-
                     {currentLocation && selectedMechanic && (
                         <MapViewDirections
                             origin={{ latitude: currentLocation.location.lat, longitude: currentLocation.location.lng }}
                             destination={selectedMechanic.coordinates}
-                            apikey='AIzaSyBnFhnXkBxly_Yu_PehfSeoaJlDs6WwP-Y'
+                            apikey={GOOGLE_MAPS_APIKEY}
                             strokeWidth={3}
                             strokeColor="green"
                         />
@@ -237,7 +270,7 @@ export const MechanicScreen = () => {
             </View>
             <BottomSheet
                 ref={sheetRef}
-                index={0} // Set to 0 for initial snap point
+                index={0}
                 snapPoints={snapPoints}
                 onChange={(index) => {
                     setCurrentSnapIndex(index);
@@ -245,7 +278,10 @@ export const MechanicScreen = () => {
             >
                 <View style={styles.contentContainer}>
                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 8, justifyContent: 'center' }}>
-                        <Text style={styles.headerText}>Nearest Mechanics</Text>
+                        <MechanicNameRow
+                            selectedMechanic={selectedMechanic}
+                            onPress={() => setDetailsVisible(true)} // Show the details bottom sheet on press
+                        />
                     </View>
                     {loading ? (
                         <ActivityIndicator size="large" color="#0000ff" />
@@ -259,6 +295,11 @@ export const MechanicScreen = () => {
                     )}
                 </View>
             </BottomSheet>
+            <MechanicDetailsBottomSheet
+                mechanic={selectedMechanic}
+                isVisible={isDetailsVisible}
+                onClose={() => setDetailsVisible(false)}
+            />
         </View>
     );
 };
@@ -273,11 +314,11 @@ const styles = StyleSheet.create({
     },
     mapScreen: {
         width: '100%',
-        height: '100%' // Adjust to ensure enough space for the BottomSheet
+        height: '100%'
     },
     contentContainer: {
-        flex: 1, // Ensure this container can expand
-        paddingTop: 16,
+        flex: 1,
+        paddingTop: 0,
         paddingBottom: 8,
         backgroundColor: '#fff'
     },
@@ -303,7 +344,7 @@ const styles = StyleSheet.create({
     },
     flatListContent: {
         paddingBottom: 16,
-        flexGrow: 1, // Ensure the FlatList content container expands to fill available space
+        flexGrow: 1,
         paddingHorizontal: 16
     },
     autoComplete: {
@@ -316,5 +357,39 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#fff',
         justifyContent: 'center',
-    }
+    },
+    mechanicNameRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 4,
+        paddingHorizontal: 16,
+        backgroundColor: '#fff',
+        width: '100%',
+        alignItems: 'center',
+        borderBottomColor: '#ccc',
+    },
+    nearestMechanicText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    selectedMechanicContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 4,
+        backgroundColor: 'black',
+        padding: 0,
+    },
+    selectedMechanicText: {
+        fontSize: 16,
+        marginRight: 10,
+        fontFamily: 'Asap-Medium',
+        color: 'white',
+        padding: 6,
+        textAlign: 'center',
+    },
+    icon: {
+        alignSelf: 'center',
+        marginRight: 10,
+    },
 });
