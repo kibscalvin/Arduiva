@@ -11,7 +11,7 @@ const EPayCard = () => {
   const fetchData = () => {
     // Simulated API call to fetch data
     // Replace this with actual API integration
-    const updatedBalance = 231900; // Example balance
+    const updatedBalance = 231990; // Example balance
     const formattedBalance = updatedBalance.toLocaleString();
     const fetchedUserName = 'Calvin'; // Example user name
     setBalance(updatedBalance);

@@ -9,8 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import { GOOGLE_MAPS_APIKEY } from '@env';
 import { useDispatch } from 'react-redux';
-import { setCurrentLocation, setServiceProviderLocation } from '../Redux/slices/navSlice';
 
+import { setCurrentLocation, setServiceProviderLocation } from '../../Redux/slices/navSlice';
 const HomeScreen = () => {
 
     const dispatch = useDispatch();

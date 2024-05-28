@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { setPaymentMode, selectPaymentMode } from '../Redux/slices/paymentSlice';
+import { setPaymentMode, selectPaymentMode } from '../../Redux/slices/paymentSlice';
 
 const PaymentOptionsPage = () => {
   const dispatch = useDispatch();

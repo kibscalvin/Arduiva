@@ -3,27 +3,16 @@ import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, Animated }
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectCurrentLocation, setCurrentLocation, setServiceProviderLocation, selectServiceProviderLocation } from '../Redux/slices/navSlice';
+import { selectCurrentLocation, setCurrentLocation, setServiceProviderLocation, selectServiceProviderLocation } from '../../Redux/slices/navSlice';
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_MAPS_APIKEY } from '@env';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
-import MechanicDetailsBottomSheet from './MechanicDetailsBottomSheet'; // Import the new component
+import MechanicDetailsBottomSheet from '../tertiaryScreens/MechanicDetailsBottomSheet'; // Import the new component
+import { generateRandomCoordinates } from '../../utils/calc/randomCoord'  
+import { adjustMapPadding } from '../../utils/calc/mapPadding'; 
 
-const generateRandomCoordinates = (lat, lng, radius = 500) => {
-    const getRandomOffset = () => (Math.random() - 0.5) * 2 * radius;
-    const earthRadius = 6371;
-    const getRandomDistance = () => Math.sqrt(Math.random()) * radius;
-    const getRandomAngle = () => Math.random() * 2 * Math.PI;
-    const dx = getRandomDistance() / earthRadius;
-    const angle = getRandomAngle();
-    const deltaLat = dx * Math.cos(angle);
-    const deltaLng = dx * Math.sin(angle);
-    const randomLat = lat + deltaLat;
-    const randomLng = lng + deltaLng;
-    return { latitude: randomLat, longitude: randomLng };
-};
 
 const MechanicNameRow = ({ selectedMechanic, onPress }) => {
     const slideAnim = useRef(new Animated.Value(0)).current;
@@ -108,13 +97,7 @@ export const MechanicScreen = () => {
         }
     }, [currentLocation]);
 
-    const adjustMapPadding = (snapIndex) => {
-        const paddingMap = {
-            0: { top: 100, right: 100, bottom: 300, left: 100 },
-            1: { top: 100, right: 100, bottom: 700, left: 100 },
-        };
-        return paddingMap[snapIndex] || { top: 100, right: 100, bottom: 100, left: 100 };
-    };
+   
 
     useEffect(() => {
         if (currentLocation?.location && serviceProviderLocation?.coordinates) {
