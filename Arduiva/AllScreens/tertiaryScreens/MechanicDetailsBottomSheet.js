@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Pressable, Animated } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTools, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPaymentMode, selectPaymentMode } from '../../Redux/slices/paymentSlice';
-import { calculatePrice }  from '../../utils/calc/priceCalc';
-import {
-    BallIndicator,
-    BarIndicator,
-    DotIndicator,
-    MaterialIndicator,
-    PacmanIndicator,
-    PulseIndicator,
-    SkypeIndicator,
-    UIActivityIndicator,
-    WaveIndicator,
-  } from 'react-native-indicators';
+import { calculatePrice } from '../../utils/calc/priceCalc';
+import { DotIndicator } from 'react-native-indicators';
+
 
 const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
     const [loading, setLoading] = useState(true);
@@ -33,11 +24,9 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
             setTimeout(() => {
                 setPrice(calculatePrice(mechanic.distance));
                 setLoading(false);
-            }, 1); // 2000
+            }, 1);
         }
     }, [isVisible, mechanic]);
-
-    
 
     const handleConfirm = () => {
         setConfirmed(true);
@@ -51,22 +40,14 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
     return (
         <BottomSheet
             index={isVisible ? 0 : -1}
-            snapPoints={[ '70%']}
+            snapPoints={['70%']}
             onClose={onClose}
             enablePanDownToClose={true}
         >
             <View style={styles.container}>
                 {loading ? (
                     <View style={styles.loadingContainer}>
-                     {/* <SkypeIndicator size="100" color="#0000ff" /> */}
-                     {/* <UIActivityIndicator size="100" color="#0000ff" /> */}
-                     {/* <PulseIndicator size={100} color="#0000ff" /> */}
-                     {/* <WaveIndicator size={100} color="#0000ff" /> */}
-                     <DotIndicator size={8} color="#bdff7b" />
-
-                        
-                        {/* <Text style={styles.loadingText}>Loading
-                        ...</Text> */}
+                        <DotIndicator size={8} color="#bdff7b" />
                     </View>
                 ) : confirmed ? (
                     <Animated.View style={[styles.confirmationContainer, { opacity: opacityAnim }]}>
@@ -74,19 +55,20 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
                     </Animated.View>
                 ) : (
                     <View style={styles.contentContainer}>
-
-                        <View style = {styles.mechanicContainer}>
-                        <FontAwesomeIcon icon={faTools} size={40} color="#424242" />
-                        <Text style={styles.mechanicName}>{mechanic.name}</Text>
+                        <View style={styles.mechanicContainer}>
+                            <FontAwesomeIcon icon={faTools} size={40} color="#424242" />
+                            <Text style={styles.mechanicName}>{mechanic.name}</Text>
+                        </View>
+                        <View style={styles.priceDetails}>
+                            <View style={[styles.detailContainer, {backgroundColor: '', paddingVertical: 12}]}>
+                                <Text style={styles.detailLabel}>Distance:</Text>
+                                <Text style={[styles.mechanicDetails, {fontFamily: 'RobotoMono-Regular'}]}>{mechanic.distance}</Text>
                             </View>
-                           
-                            <View style = {styles.priceDetails}>
-                        <Text style={styles.mechanicDetails}>Distance: {mechanic.distance}</Text>
-                        <Text style={styles.mechanicDetails}>Estimated Price: UGX {price}</Text>
+                            <View style={[styles.detailContainer, {paddingVertical: 12}]}>
+                                <Text style={[styles.detailLabel]}>Estimated Price:</Text>
+                                <Text style={[styles.mechanicDetails, {fontFamily: 'RobotoMono-Regular'}]}>UGX {price}</Text>
                             </View>
-
-                            
-                        
+                        </View>
                         <View style={styles.paymentContainer}>
                             <Pressable
                                 style={[
@@ -107,7 +89,6 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
                                 <Text style={styles.paymentButtonText}>E-Pay</Text>
                             </Pressable>
                         </View>
-
                         <Pressable style={styles.confirmButton} onPress={handleConfirm}>
                             <Text style={styles.confirmButtonText}>Confirm {paymentMode}</Text>
                         </Pressable>
@@ -121,53 +102,70 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        paddingTop: 16,
+        paddingBottom: 16,
         alignItems: 'center',
+        paddingHorizontal: 16,
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    loadingText: {
-        marginTop: 16,
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
     contentContainer: {
         flex: 1,
         alignItems: 'center',
-       
+        width: '100%',
     },
     mechanicName: {
         fontSize: 24,
-        //fontWeight: 'bold',
         marginVertical: 8,
         fontFamily: 'Asap-SemiBold',
         color: '#424242'
     },
     mechanicDetails: {
         fontSize: 18,
-        marginVertical: 4,
-        
     },
     mechanicContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
         width: '100%',
         padding: 8,
-        borderRadius:12,
+        borderRadius: 12,
         borderColor: '#ccc',
+        backgroundColor: '#f5f5f5',
+    },
+    priceDetails: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: 8,
+        borderRadius: 12,
+        borderColor: '#ccc',
+        backgroundColor: '#f5f5f5',
+        marginVertical: 8,
+    },
+    detailContainer: {
+        flex: 1,
+        alignItems: 'center',
+       
+    },
+    detailLabel: {
+        fontSize: 16,
+        color: '#424242',
+        fontFamily: 'Asap-Regular'
+        //fontWeight: 'bold'
     },
     paymentContainer: {
         flexDirection: 'row',
-        marginVertical: 16,
-        backgroundColor: '#000',
         width: '100%',
+        padding: 8,
+        borderRadius: 12,
+        backgroundColor: '#f5f5f5',
     },
     paymentButton: {
+        flex: 1,
         padding: 16,
         borderRadius: 8,
         borderWidth: 1,
@@ -179,17 +177,7 @@ const styles = StyleSheet.create({
     },
     paymentButtonText: {
         fontSize: 18,
-    },
-    priceDetails: {
-        
-        backgroundColor: '#f5f5f5',
-        width: '100%',
-        padding: 8,
-        borderRadius:12,
-        borderColor: '#ccc',
-        marginVertical: 8,
-        justifyContent: 'space-between',
-      
+        textAlign: 'center',
     },
     confirmButton: {
         padding: 16,
@@ -200,6 +188,7 @@ const styles = StyleSheet.create({
     confirmButtonText: {
         color: '#366605',
         fontSize: 18,
+        textAlign: 'center',
     },
     confirmationContainer: {
         flex: 1,

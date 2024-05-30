@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { setUserBalance, setUserName } from '../Redux/slices/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
 const EPayCard = () => {
   // State variables to hold the account balance and user's name
-  const [balance, setBalance] = useState(0);
-  const [userName, setUserName] = useState('');
+  const { balance, userName } = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   // Function to fetch updated balance and user's name (example)
   const fetchData = () => {
@@ -14,8 +15,8 @@ const EPayCard = () => {
     const updatedBalance = 231990; // Example balance
     const formattedBalance = updatedBalance.toLocaleString();
     const fetchedUserName = 'Calvin'; // Example user name
-    setBalance(updatedBalance);
-    setUserName(fetchedUserName);
+    dispatch(setUserBalance(updatedBalance));
+    dispatch(setUserName(fetchedUserName));
   };
 
   // Fetch data on component mount

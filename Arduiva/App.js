@@ -76,6 +76,14 @@ export default function App() {
     'Poppins-SemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
     'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'),
     'Poppins-MediumItalic': require('./assets/fonts/Poppins-MediumItalic.ttf'),
+    'RobotoMono-Regular': require('./assets/fonts/RobotoMono-Regular.ttf'),
+    'RobotoMono-Bold': require('./assets/fonts/RobotoMono-Bold.ttf'),
+    'RobotoMono-Medium': require('./assets/fonts/RobotoMono-Medium.ttf'),
+    'RobotoMono-Light': require('./assets/fonts/RobotoMono-Light.ttf'),
+    'RobotoMono-MediumItalic': require('./assets/fonts/RobotoMono-MediumItalic.ttf'),
+    
+
+
   });
 
   if (!loaded) {

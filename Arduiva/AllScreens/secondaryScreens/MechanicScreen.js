@@ -86,7 +86,7 @@ export const MechanicScreen = () => {
                     return {
                         id: `${index + 1}`,
                         name: `Mechanic ${index + 1}`,
-                        distance: `${(Math.random() * 10 + 1).toFixed(1)} km`,
+                        distance: `${(Math.random() * 10 + 1).toFixed(1)}km`,
                         coordinates: randomCoordinates,
                     };
                 });
