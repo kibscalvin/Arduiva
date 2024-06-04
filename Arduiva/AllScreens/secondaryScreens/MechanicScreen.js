@@ -77,6 +77,12 @@ export const MechanicScreen = () => {
   const [isDetailsVisible, setDetailsVisible] = useState(false);
   const [isProblemsInfoVisible, setProblemsInfoVisible] = useState(false);
 
+  const handleProceed = () => {
+    setDetailsVisible(true);
+    setProblemsInfoVisible(false); // Hide ProblemsInfo when navigating to MechanicDetails
+
+  };
+
   useEffect(() => {
     if (currentLocation?.location) {
       const { lat, lng } = currentLocation.location;
@@ -258,6 +264,12 @@ export const MechanicScreen = () => {
           setCurrentSnapIndex(index);
         }}
       >
+        <MechanicDetailsBottomSheet
+  mechanic={selectedMechanic}
+  isVisible={isDetailsVisible}
+  onClose={() => setDetailsVisible(false)}
+/>
+
         <View style={styles.contentContainer}>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 8, justifyContent: 'center' }}>
             <MechanicNameRow
@@ -286,6 +298,7 @@ export const MechanicScreen = () => {
         <View style={styles.overlay}>
           <ProblemsInfo
             isVisible={isProblemsInfoVisible}
+            onProceed={handleProceed}
             onClose={() => setProblemsInfoVisible(false)}
           />
         </View>

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTools, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { setPaymentMode, selectPaymentMode } from '../../Redux/slices/paymentSlice';
+import { selectUserBalance } from '../../Redux/slices/userSlice';
 import { calculatePrice } from '../../utils/calc/priceCalc';
 import { DotIndicator } from 'react-native-indicators';
 
-
+const { height } = Dimensions.get('window');
 
 const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
     const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
     const opacityAnim = useState(new Animated.Value(0))[0];
     const dispatch = useDispatch();
     const paymentMode = useSelector(selectPaymentMode);
+    const balance = useSelector(selectUserBalance);
 
     useEffect(() => {
         if (isVisible && mechanic) {
@@ -25,7 +27,7 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
             setTimeout(() => {
                 setPrice(calculatePrice(mechanic.distance));
                 setLoading(false);
-            }, 1);
+            }, 1000);
         }
     }, [isVisible, mechanic]);
 
@@ -61,13 +63,13 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
                             <Text style={styles.mechanicName}>{mechanic.name}</Text>
                         </View>
                         <View style={styles.priceDetails}>
-                            <View style={[styles.detailContainer, {backgroundColor: '', paddingVertical: 12}]}>
+                            <View style={[styles.detailContainer, { paddingVertical: 12 }]}>
                                 <Text style={styles.detailLabel}>Distance:</Text>
-                                <Text style={[styles.mechanicDetails, {fontFamily: 'RobotoMono-Regular'}]}>{mechanic.distance}</Text>
+                                <Text style={[styles.mechanicDetails, { fontFamily: 'RobotoMono-Regular' }]}>{mechanic.distance}</Text>
                             </View>
-                            <View style={[styles.detailContainer, {paddingVertical: 12}]}>
-                                <Text style={[styles.detailLabel]}>Estimated Price:</Text>
-                                <Text style={[styles.mechanicDetails, {fontFamily: 'RobotoMono-Regular'}]}>UGX {price}</Text>
+                            <View style={[styles.detailContainer, { paddingVertical: 12 }]}>
+                                <Text style={styles.detailLabel}>Estimated Price:</Text>
+                                <Text style={[styles.mechanicDetails, { fontFamily: 'RobotoMono-Regular' }]}>UGX {price}</Text>
                             </View>
                         </View>
                         <View style={styles.paymentContainer}>
@@ -90,8 +92,13 @@ const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
                                 <Text style={styles.paymentButtonText}>E-Pay</Text>
                             </Pressable>
                         </View>
+                        {paymentMode === 'ePay' && (
+                            <View style={styles.balanceContainer}>
+                                <Text style={styles.balanceText}>Balance on E-Pay: UGX {balance.toLocaleString()}</Text>
+                            </View>
+                        )}
                         <Pressable style={styles.confirmButton} onPress={handleConfirm}>
-                            <Text style={styles.confirmButtonText}>Confirm {paymentMode}</Text>
+                            <Text style={styles.confirmButtonText}>Confirm</Text>
                         </Pressable>
                     </View>
                 )}
@@ -150,13 +157,11 @@ const styles = StyleSheet.create({
     detailContainer: {
         flex: 1,
         alignItems: 'center',
-       
     },
     detailLabel: {
         fontSize: 16,
         color: '#424242',
         fontFamily: 'Asap-Regular'
-        //fontWeight: 'bold'
     },
     paymentContainer: {
         flexDirection: 'row',
@@ -180,14 +185,31 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
     },
+    balanceContainer: {
+        marginTop: 8,
+        padding: 8,
+        borderRadius: 8,
+        backgroundColor: '#f5f5f5',
+        alignItems: 'center',
+        width: '100%',
+        paddingHorizontal: 17
+    },
+    balanceText: {
+        fontSize: 16,
+        color: '#424242',
+        fontFamily: 'Asap-Regular',
+    },
     confirmButton: {
         padding: 16,
-        backgroundColor: '#bdff7b',
+        backgroundColor: '#10151D',
         borderRadius: 8,
-        marginTop: 16,
+        position: 'absolute',
+        bottom: 20,
+        left: '5%',
+        right: '5%',
     },
     confirmButtonText: {
-        color: '#366605',
+        color: '#E1E7EF',
         fontSize: 18,
         textAlign: 'center',
     },

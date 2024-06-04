@@ -1,10 +1,11 @@
+// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    balance: 0,
-    userName: '',
+    balance: 53500, // Initial balance
+    userName: '', // Initial user name
   },
   reducers: {
     setUserBalance: (state, action) => {
@@ -16,8 +17,9 @@ export const userSlice = createSlice({
   },
 });
 
-// Export actions
 export const { setUserBalance, setUserName } = userSlice.actions;
 
-// Export reducer
+export const selectUserBalance = (state) => state.user.balance;
+export const selectUserName = (state) => state.user.userName;
+
 export default userSlice.reducer;

@@ -4,7 +4,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-const ProblemsInfo = ({ isVisible, onClose }) => {
+const ProblemsInfo = ({ isVisible, onClose, onProceed }) => {
   const [problems, setProblems] = useState([
     { id: 1, name: 'Flat Tire' },
     { id: 2, name: 'Engine Overheating' },
@@ -93,10 +93,10 @@ const ProblemsInfo = ({ isVisible, onClose }) => {
             (!selectedProblem || (selectedProblem?.id === 1 && !selectedSpareTireOption)) && styles.buttonDisabled
           ]}
           disabled={!selectedProblem || (selectedProblem?.id === 1 && !selectedSpareTireOption)}
-          onPress={() => { /* handle button press */ }}
+          onPress={onProceed}
         >
           <Text style={styles.buttonText}>Proceed</Text>
-        </TouchableOpacity>
+</TouchableOpacity>
       </View>
     </BottomSheet>
   );
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     borderColor: '#6caf41',
     backgroundColor: '#eff8e9',
     color: '#6caf41',
-    fontFamily: 'Asap-Regular'
+    fontFamily: 'Asap-SemiBold'
   },
   flatListContent: {
     paddingBottom: 16,

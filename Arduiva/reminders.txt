@@ -16,6 +16,9 @@ nice very dark blue sort of color - alongside #F5FFCD for certain text, you'll k
 
 
 
+confirmed blue color #131331
+
+
 
 
 F8FAFD.  git
@@ -24,6 +27,11 @@ F8FAFD.  git
 
 
 #6CAF41 -- green color of now
+colfaxAi font for b....e
+
+any black color #10151d
+
+white text #E1E7EF
 
 
 
