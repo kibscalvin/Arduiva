@@ -40,7 +40,8 @@
     "react-native-svg": "15.2.0",
     "react-redux": "^9.1.2",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+     "@expo/ngrok" : "4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

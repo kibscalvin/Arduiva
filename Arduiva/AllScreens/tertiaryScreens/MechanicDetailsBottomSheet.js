@@ -9,6 +9,7 @@ import { calculatePrice } from '../../utils/calc/priceCalc';
 import { DotIndicator } from 'react-native-indicators';
 
 
+
 const MechanicDetailsBottomSheet = ({ mechanic, isVisible, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [price, setPrice] = useState(0);
